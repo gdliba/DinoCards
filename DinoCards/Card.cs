@@ -25,7 +25,7 @@ namespace DinoCards
         private Texture2D _shadowTex;
 
         private Vector2 _pos;
-        private Rectangle _rect;
+        public Rectangle Rect { get; private set; }
         private Vector2 _shadowOffset;
 
         private bool _isHeld;
@@ -43,7 +43,7 @@ namespace DinoCards
             _value = value;
 
             _pos = position;
-            _rect = new Rectangle(position.ToPoint(), frontTex.Bounds.Size);
+            Rect = new Rectangle(position.ToPoint(), frontTex.Bounds.Size);
             _shadowOffset = new Vector2(8);
 
             _isHeld = false;
@@ -56,17 +56,17 @@ namespace DinoCards
         {
             if (msCurr.LeftButton == ButtonState.Released)
                 _isHeld = false;
-            else if (msOld.LeftButton == ButtonState.Released && _rect.Contains(msCurr.Position))
+            else if (msOld.LeftButton == ButtonState.Released && Rect.Contains(msCurr.Position))
                 _isHeld = true;
 
             if (_isHeld)
             {
                 _pos += (msCurr.Position - msOld.Position).ToVector2();
             }
-            
-            _rect.Location = _pos.ToPoint();
 
-            _highlight = _rect.Contains(msCurr.Position);
+            Rect = new Rectangle(_pos.ToPoint(), _frontTex.Bounds.Size);
+
+            _highlight = Rect.Contains(msCurr.Position);
         }
 
         public void Draw(SpriteBatch sb)
